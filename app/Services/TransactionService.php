@@ -42,4 +42,15 @@ class TransactionService extends Service
 
         return $data;
     }
+
+    public function getDailyVolume() : array {
+        // dd(Carbon::now()->format('Y-m-d'));
+        $purchased = Auth::user()->transactions->where('description', 'btc - BUY')->where('created_at', '>=', Carbon::now()->format('Y-m-d'))->sum('coin_amount');
+        $sold = Auth::user()->transactions->where('description', 'btc - SELL')->where('created_at', '>=', Carbon::now()->format('Y-m-d'))->sum('coin_amount');
+
+        return [
+            'purchased' => $purchased,
+            'sold'      => $sold
+        ];
+    }
 }

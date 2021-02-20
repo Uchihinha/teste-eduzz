@@ -42,4 +42,8 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         return $this->hasMany(Portfolio::class, 'user_id', 'id');
     }
 
+    public function transactions() {
+        return $this->hasMany(Transaction::class, 'user_id', 'id');
+    }
+
 }

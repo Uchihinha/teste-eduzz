@@ -37,5 +37,11 @@ class TransactionController extends Controller
         return response()->json($data);
     }
 
+    public function getDailyVolume() : JsonResponse{
+        $data = $this->serviceInstance->getDailyVolume();
+
+        return response()->json($data);
+    }
+
 
 }

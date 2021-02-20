@@ -31,4 +31,5 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('portfolio', 'PortfolioController@get');
     $router->get('resume', 'TransactionController@get');
+    $router->get('volume', 'TransactionController@getDailyVolume');
 });

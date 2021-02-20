@@ -21,6 +21,7 @@ class CreateTransactionTable extends Migration
 
             $table->string('description');
             $table->float('amount', 11, 2);
+            $table->decimal('coin_amount', 20, 10)->nullable();
             $table->enum('type', ['ADD', 'SUB']);
             $table->string('ticker')->nullable();
 

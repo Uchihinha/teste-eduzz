@@ -37,10 +37,13 @@ class CoinService
 
         $this->userService->validateBalance($amount);
 
+        $coinAmount = (float) number_format(($amount / $sellOffer), 10, '.', ',');
+
         $this->transactionService->sub([
-            'ticker'        => $coin,
-            'amount'        => $amount,
-            'description'   => $coin . ' - BUY'
+            'ticker'            => $coin,
+            'amount'            => $amount,
+            'coin_amount'       => $coinAmount,
+            'description'       => $coin . ' - BUY'
         ]);
 
         return $this->portfolioService->create([
@@ -48,7 +51,7 @@ class CoinService
             'ticker'        => $coin,
             'price'         => $sellOffer,
             'amount'        => $amount,
-            'coin_amount'   => number_format(($amount / $sellOffer), 10, '.', ',')
+            'coin_amount'   => $coinAmount
         ]);
     }
 
@@ -59,21 +62,25 @@ class CoinService
         $this->userService->validatePortfolio($amount, $buyOffer, $coin);
 
         $remainder = 0;
+        $totalCoinSold = 0;
         $originalAmount = $amount;
         foreach (Auth::user()->portfolios->where('ticker', $coin) as $value) {
             $currentAmount = ($buyOffer/$value->price) * $value->amount;
 
             if ($currentAmount <= $amount) {
                 $amount -= $currentAmount;
+                $totalCoinSold += $value->coin_amount;
             }else {
                 $remainder = $currentAmount - $amount;
+                $totalCoinSold += (float) number_format(($amount / $value->price), 10, '.', ',');
                 $amount -= $amount;
-                $this->portfolioService->create([
+
+                $remainderInstance = $this->portfolioService->create([
                     'user_id'       => Auth::user()->id,
                     'ticker'        => $coin,
                     'price'         => $value->price,
                     'amount'        => $remainder,
-                    'coin_amount'   => number_format(($remainder / $value->price), 10, '.', ',')
+                    'coin_amount'   => (float) number_format(($remainder / $value->price), 10, '.', ',')
                 ]);
             }
             $value->delete();
@@ -82,16 +89,18 @@ class CoinService
         }
 
         $this->transactionService->add([
-            'ticker'        => $coin,
-            'amount'        => $originalAmount,
-            'description'   => $coin . ' - SELL'
+            'ticker'            => $coin,
+            'amount'            => ($originalAmount + $remainder),
+            'coin_amount'       => $totalCoinSold,
+            'description'       => $coin . ' - SELL'
         ]);
 
         if ($remainder > 0)
             $this->transactionService->sub([
-                'ticker'        => $coin,
-                'amount'        => $remainder,
-                'description'   => $coin . ' - BUY'
+                'ticker'            => $coin,
+                'amount'            => $remainder,
+                'coin_amount'       => $remainderInstance->coin_amount,
+                'description'       => $coin . ' - BUY (Reinvested)'
             ]);
 
         return true;

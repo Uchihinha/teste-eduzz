@@ -14,14 +14,16 @@ class Transaction extends BaseModel
         'user_id',
         'description',
         'amount',
+        'coin_amount',
         'type',
         'ticker'
     ];
 
     protected $casts = [
-        'amount'    => 'float',
-        'created_at' => 'datetime:Y-m-d H:i:s',
-        'updated_at' => 'datetime:Y-m-d H::i:s',
+        'amount'            => 'float',
+        'coin_amount'       => 'float',
+        'created_at'        => 'datetime:Y-m-d H:i:s',
+        'updated_at'        => 'datetime:Y-m-d H::i:s',
     ];
 
 }
