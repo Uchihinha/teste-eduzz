@@ -33,7 +33,7 @@ class CoinController extends Controller
         $buyInstance = $this->serviceInstance->buy($coin, (float) $request->amount);
 
         return response()->json([
-            'message'   => 'Buy',
+            'message'   => 'Purchased!',
             'data'      => $buyInstance
         ], 201);
     }
@@ -46,7 +46,7 @@ class CoinController extends Controller
         $this->serviceInstance->sell($coin, (float) $request->amount);
 
         return response()->json([
-            'message'   => 'Sell'
+            'message'   => 'Sold!'
         ], 201);
     }
 }
