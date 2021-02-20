@@ -20,7 +20,9 @@ class CreatePortfolioTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
 
             $table->string('ticker');
-            $table->float('avarage_price', 11, 2);
+            $table->decimal('price', 20, 10);
+            $table->decimal('amount', 11, 2);
+            $table->decimal('coin_amount', 20, 10);
 
             $table->timestamps();
             $table->softDeletes();

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Services\TransactionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
@@ -22,7 +21,6 @@ class TransactionController extends Controller
 
         $params = $request->only('amount');
 
-        $params['user_id'] = Auth::user()->id;
         $params['description'] = 'Deposit';
 
         $this->serviceInstance->add($params);
@@ -31,6 +29,12 @@ class TransactionController extends Controller
             'message'   => 'Deposited!'
         ], 201);
 
+    }
+
+    public function get(Request $request) : JsonResponse {
+        $data = $this->serviceInstance->getResume($request->days ?: 90);
+
+        return response()->json($data);
     }
 
 

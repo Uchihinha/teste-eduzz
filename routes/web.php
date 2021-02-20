@@ -21,6 +21,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('login', 'AuthController@login');
 
     $router->post('deposit', 'TransactionController@deposit');
+
     $router->get('balance', 'UserController@getBalance');
+
     $router->get('quotation/{coin}', 'CoinController@getQuotation');
+
+    $router->post('buy/{coin}', 'CoinController@buy');
+    $router->post('sell/{coin}', 'CoinController@sell');
+
+    $router->get('portfolio', 'PortfolioController@get');
+    $router->get('resume', 'TransactionController@get');
 });
