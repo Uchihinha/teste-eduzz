@@ -23,4 +23,9 @@ class History extends BaseModel
         'buy_price'         => 'float',
         'created_at'        => 'datetime:Y-m-d H:i:s',
     ];
+
+    protected $hidden = [
+        'id',
+        'updated_at'
+    ];
 }

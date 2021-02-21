@@ -18,4 +18,10 @@ class Controller extends BaseController
             'expires_in' => Auth::factory()->getTTL() * 6000
         ], 200);
     }
+
+    public function get() : JsonResponse {
+        $data = $this->serviceInstance->get();
+
+        return response()->json($data);
+    }
 }

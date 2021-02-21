@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Service
@@ -18,5 +19,11 @@ class Service
         $model = $this->modelInstance->findOrFail($id);
 
         return $model;
+    }
+
+    public function get() : Collection {
+        $data = $this->modelInstance->get();
+
+        return $data;
     }
 }
