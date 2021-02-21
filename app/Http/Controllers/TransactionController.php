@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendEmail;
+use App\Mail\Notify;
 use App\Services\TransactionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class TransactionController extends Controller
 {
@@ -24,6 +28,11 @@ class TransactionController extends Controller
         $params['description'] = 'Deposit';
 
         $this->serviceInstance->add($params);
+
+        dispatch(new SendEmail(Auth::user()->email, [
+            'type'      => 'deposit',
+            'amount'    => number_format($request->amount, 2, ',', '.'),
+        ]));
 
         return response()->json([
             'message'   => 'Deposited!'

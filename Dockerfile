@@ -20,8 +20,15 @@ RUN touch /var/log/queue.log
 ENV TZ=America/Sao_Paulo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+COPY cron /etc/cron.d/cron
+
+RUN chmod 0644 /etc/cron.d/cron
+RUN crontab /etc/cron.d/cron
+
 USER ambientum
+
+RUN sudo /usr/sbin/crond -l 8
 
 WORKDIR /var/www/app
 
-# CMD ["./start.sh"]
+CMD ["./start.sh"]

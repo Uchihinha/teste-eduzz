@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Jobs\SendEmail;
+use App\Mail\Notify;
 use App\Models\Portfolio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CoinService
@@ -46,13 +49,21 @@ class CoinService
             'description'       => $coin . ' - BUY'
         ]);
 
-        return $this->portfolioService->create([
+        $portfolio = $this->portfolioService->create([
             'user_id'       => Auth::user()->id,
             'ticker'        => $coin,
             'price'         => $sellOffer,
             'amount'        => $amount,
             'coin_amount'   => $coinAmount
         ]);
+
+        dispatch(new SendEmail(Auth::user()->email, [
+            'type'      => "$coin buy",
+            'amount'    => number_format($amount, 2, ',', '.') . " -> $coinAmount",
+        ]));
+
+
+        return $portfolio;
     }
 
     public function sell(string $coin = 'BTC', float $amount) : bool {
@@ -102,6 +113,11 @@ class CoinService
                 'coin_amount'       => $remainderInstance->coin_amount,
                 'description'       => $coin . ' - BUY (Reinvested)'
             ]);
+
+        dispatch(new SendEmail(Auth::user()->email, [
+            'type'      => "$coin sell",
+            'amount'    => number_format($originalAmount, 2, ',', '.') . " -> $totalCoinSold",
+        ]));
 
         return true;
     }
