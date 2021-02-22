@@ -38,6 +38,8 @@ Explicando cada comando...
 
 Após tudo isso configurado, o ambiente estará rodando na porta 8080, pode ser acessada sua página inicial em [http://localhost:8080](http://localhost:8080).
 
+A documentação em JSON pode ser encontrada [aqui](https://www.postman.com/collections/a71fc94cf7a7101c4130), basta fazer o download e importar no postman.
+
 ## Recursos Utilizados
 
 Toda a parte de autenticação foi feita utilizando JWT (JSON Web Token).
