@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -19,7 +20,7 @@ class Controller extends BaseController
         ], 200);
     }
 
-    public function get() : JsonResponse {
+    public function get(Request $request) : JsonResponse {
         $data = $this->serviceInstance->get();
 
         return response()->json($data);

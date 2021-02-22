@@ -32,16 +32,18 @@ class Hash
 
         $collection = json_decode(json_encode($collection));
 
-        foreach ($collection as $key => $value) {
-            if (gettype($value) == 'object') $value = (array) $value;
+        if (gettype($collection) == 'array') {
+            foreach ($collection as $key => $value) {
+                if (gettype($value) == 'object') $value = (array) $value;
 
-            if (gettype($value) == 'array') {
-                if (gettype($collection) == 'object') $collection  = (array) $collection;
-                $collection[$key] = $this->hashing($value);
-            } else {
-                if (strstr($key, '_id') != '' || $key === 'id') {
+                if (gettype($value) == 'array') {
                     if (gettype($collection) == 'object') $collection  = (array) $collection;
-                    $collection[$key] = Crypt::encrypt($value);
+                    $collection[$key] = $this->hashing($value);
+                } else {
+                    if (strstr($key, '_id') != '' || $key === 'id') {
+                        if (gettype($collection) == 'object') $collection  = (array) $collection;
+                        $collection[$key] = Crypt::encrypt($value);
+                    }
                 }
             }
         }

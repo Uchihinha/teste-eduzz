@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: bitcoin@123
+      POSTGRES_DB: bitcoin
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+
+  app:
+    build: ./
+    container_name: app
+    volumes:
+      - ./:/var/www/app
+    ports:
+      - "8080:8080"
+    links:
+      - db

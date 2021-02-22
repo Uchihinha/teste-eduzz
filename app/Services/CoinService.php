@@ -106,7 +106,12 @@ class CoinService
             'description'       => $coin . ' - SELL'
         ]);
 
-        if ($remainder > 0)
+        dispatch(new SendEmail(Auth::user()->email, [
+            'type'      => "$coin sell",
+            'amount'    => number_format($originalAmount, 2, ',', '.') . " -> $totalCoinSold",
+        ]));
+
+        if ($remainder > 0) {
             $this->transactionService->sub([
                 'ticker'            => $coin,
                 'amount'            => $remainder,
@@ -114,10 +119,11 @@ class CoinService
                 'description'       => $coin . ' - BUY (Reinvested)'
             ]);
 
-        dispatch(new SendEmail(Auth::user()->email, [
-            'type'      => "$coin sell",
-            'amount'    => number_format($originalAmount, 2, ',', '.') . " -> $totalCoinSold",
-        ]));
+            dispatch(new SendEmail(Auth::user()->email, [
+                'type'      => "$coin reinvested",
+                'amount'    => number_format($remainder, 2, ',', '.') . " -> $remainderInstance->coin_amount",
+            ]));
+        }
 
         return true;
     }
