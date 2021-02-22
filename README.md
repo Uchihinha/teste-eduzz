@@ -34,7 +34,7 @@ Explicando cada comando...
 * ``sudo /usr/sbin/crond -l 8`` irá habilitar a execuação da cron que ficará monitorando a cotação do bitcoin de 10 em 10 minutos para montar o histórico;
 * ``php /var/www/app/artisan queue:listen &`` irá ligar a fila que ficará responsável por enviar os emails;
 * ``php artisan migrate`` criará todas as tabelas do banco de dados através do Eloquent, o ORM do framework;
-* ``php artisan jwt:secret`` gerará a key que será usada para autenticação da aplicação;
+* ``php artisan jwt:secret`` gerará a key que será usada para autenticação da aplicação, pegue a chave gerada e adicione no .env ``JWT_SECRET=<<TOKEN>>``;
 
 Após tudo isso configurado, o ambiente estará rodando na porta 8080, pode ser acessada sua página inicial em [http://localhost:8080](http://localhost:8080).
 
